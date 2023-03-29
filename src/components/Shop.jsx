@@ -13,13 +13,22 @@ const Shop = () => {
             .then((data) => setMeals(data.meals))
     }, [])
 
+    useEffect(() => {
+        const getBookmark = JSON.parse(localStorage.getItem('bookmark'));
+        if (getBookmark) {
+            setBookmark(getBookmark);
+        }
+    }, [meals])
+
     const handleBookmark = (meal) => {
         if (![...bookmark].includes(meal)) {
             const newBookmark = [...bookmark, meal];
             setBookmark(newBookmark);
+        } else {
+            return;
         }
 
-        // addToDb(meal.idMeal, meal.strMeal);
+        addToDb(meal.idMeal, meal.strMeal);
     }
 
     return (

@@ -15,7 +15,9 @@ const Bookmark = ({ bookmark }) => {
                     })
                 }
                 <div className="card-actions justify-end">
-                    <button className="btn btn-accent w-full">Delete ALl</button>
+                    <button onClick={() => {
+                        localStorage.removeItem('bookmark')
+                    }} className="btn btn-accent w-full">Delete ALl</button>
                 </div>
             </div>
         </div>
