@@ -5,7 +5,7 @@ import SingleCard from './SingleCard';
 
 const Shop = () => {
     const [meals, setMeals] = useState([]);
-    const [bookmark, setBookmark] = useState([]);
+    const [bookmarks, setBookmarks] = useState([]);
 
     useEffect(() => {
         fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a')
@@ -16,19 +16,24 @@ const Shop = () => {
     useEffect(() => {
         const getBookmark = JSON.parse(localStorage.getItem('bookmark'));
         if (getBookmark) {
-            setBookmark(getBookmark);
+            setBookmarks(getBookmark);
         }
     }, [meals])
 
     const handleBookmark = (meal) => {
-        if (![...bookmark].includes(meal)) {
-            const newBookmark = [...bookmark, meal];
-            setBookmark(newBookmark);
-        } else {
-            return;
+        const exists = bookmarks.find((bookmark) => bookmark.idMeal === meal.idMeal);
+        if (exists) {
+            return alert('This meal is already exists!');
         }
+        const newBookmark = [...bookmarks, meal];
+        setBookmarks(newBookmark);
 
         addToDb(meal.idMeal, meal.strMeal);
+    }
+
+    const handleDeleteBookmark = () => {
+        localStorage.removeItem('bookmark');
+        setBookmarks([]);
     }
 
     return (
@@ -43,7 +48,7 @@ const Shop = () => {
                 }
             </div>
             <div>
-                <Bookmark bookmark={bookmark} key={bookmark.idMeal}></Bookmark>
+                <Bookmark bookmarks={bookmarks} key={bookmarks.idMeal} handleDeleteBookmark={handleDeleteBookmark}></Bookmark>
             </div>
         </div>
     );
